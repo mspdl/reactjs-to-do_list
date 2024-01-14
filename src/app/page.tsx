@@ -11,8 +11,13 @@ export default function Home() {
   ]);
 
   const handleAddButton = () => {
+    if (itemInput.trim() === "") return;
     setTaskList([...taskList, { label: itemInput, isDone: false }]);
     setItemInput("");
+  };
+
+  const handleRemoveButton = (taskId: number) => {
+    setTaskList(taskList.filter((task, index) => index !== taskId));
   };
 
   return (
@@ -33,10 +38,16 @@ export default function Home() {
       <p className="my-4">{taskList.length} items on the list</p>
 
       <ul className="w-full max-w-lg list-disc pl-5">
-        {taskList.map((task) => (
-          <li key={task.label}>
+        {taskList.map((task, index) => (
+          <li key={index}>
             {task.label + " "}
-            <button className="hover:underline"> [ delete ]</button>
+            <button
+              className="hover:underline"
+              onClick={() => handleRemoveButton(index)}
+            >
+              {" "}
+              [ delete ]
+            </button>
           </li>
         ))}
       </ul>
