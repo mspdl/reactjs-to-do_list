@@ -6,7 +6,7 @@ import { Task } from "./types/Task";
 export default function Home() {
   const [itemInput, setItemInput] = useState("");
   const [taskList, setTaskList] = useState<Task[]>([
-    { label: "Do homework", isDone: false },
+    { label: "Do homework", isDone: true },
     { label: "Do the dishes", isDone: false },
   ]);
 
@@ -18,6 +18,12 @@ export default function Home() {
 
   const handleRemoveButton = (taskId: number) => {
     setTaskList(taskList.filter((task, index) => index !== taskId));
+  };
+
+  const handleCheckButton = (taskId: number) => {
+    const updatedList = [...taskList];
+    updatedList[taskId].isDone = !updatedList[taskId].isDone;
+    setTaskList(updatedList);
   };
 
   return (
@@ -37,9 +43,15 @@ export default function Home() {
 
       <p className="my-4">{taskList.length} items on the list</p>
 
-      <ul className="w-full max-w-lg list-disc pl-5">
+      <ul className="w-full max-w-lg pl-5">
         {taskList.map((task, index) => (
           <li key={index}>
+            <input
+              onClick={() => handleCheckButton(index)}
+              type="checkbox"
+              checked={task.isDone}
+              className="mr-3 w-6 h-6"
+            />
             {task.label + " "}
             <button
               className="hover:underline"
