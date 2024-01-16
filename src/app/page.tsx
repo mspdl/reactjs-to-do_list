@@ -4,19 +4,24 @@ import { useState } from "react";
 import { Task } from "./types/Task";
 
 export default function Home() {
+  function getUniqueID() {
+    return Math.floor(Math.random() * Math.floor(Math.random() * Date.now()));
+  }
+
   const [itemInput, setItemInput] = useState("");
   const [taskList, setTaskList] = useState<Task[]>([
-    { id: 1, label: "Do homework", isDone: true },
-    { id: 2, label: "Do the dishes", isDone: false },
+    { id: getUniqueID(), label: "Do homework", isDone: true },
+    { id: getUniqueID(), label: "Do the dishes", isDone: false },
   ]);
 
   const handleAddButton = () => {
     if (itemInput.trim() === "") return;
     setTaskList([
       ...taskList,
-      { id: taskList.length + 1, label: itemInput, isDone: false },
+      { id: getUniqueID(), label: itemInput, isDone: false },
     ]);
     setItemInput("");
+    console.log(taskList);
   };
 
   const handleRemoveButton = (taskId: number) => {
