@@ -6,23 +6,30 @@ import { Task } from "./types/Task";
 export default function Home() {
   const [itemInput, setItemInput] = useState("");
   const [taskList, setTaskList] = useState<Task[]>([
-    { label: "Do homework", isDone: true },
-    { label: "Do the dishes", isDone: false },
+    { id: 1, label: "Do homework", isDone: true },
+    { id: 2, label: "Do the dishes", isDone: false },
   ]);
 
   const handleAddButton = () => {
     if (itemInput.trim() === "") return;
-    setTaskList([...taskList, { label: itemInput, isDone: false }]);
+    setTaskList([
+      ...taskList,
+      { id: taskList.length + 1, label: itemInput, isDone: false },
+    ]);
     setItemInput("");
   };
 
   const handleRemoveButton = (taskId: number) => {
-    setTaskList(taskList.filter((task, index) => index !== taskId));
+    setTaskList(taskList.filter((task) => task.id !== taskId));
   };
 
   const handleCheckButton = (taskId: number) => {
     const updatedList = [...taskList];
-    updatedList[taskId].isDone = !updatedList[taskId].isDone;
+    for (let i in updatedList) {
+      if (updatedList[i].id === taskId) {
+        updatedList[i].isDone = !updatedList[i].isDone;
+      }
+    }
     setTaskList(updatedList);
   };
 
@@ -44,10 +51,10 @@ export default function Home() {
       <p className="my-4">{taskList.length} items on the list</p>
 
       <ul className="w-full max-w-lg pl-5">
-        {taskList.map((task, index) => (
-          <li key={index}>
+        {taskList.map((task) => (
+          <li key={task.id}>
             <input
-              onClick={() => handleCheckButton(index)}
+              onClick={() => handleCheckButton(task.id)}
               type="checkbox"
               checked={task.isDone}
               className="mr-3 w-6 h-6"
@@ -55,7 +62,7 @@ export default function Home() {
             {task.label + " "}
             <button
               className="hover:underline"
-              onClick={() => handleRemoveButton(index)}
+              onClick={() => handleRemoveButton(task.id)}
             >
               {" "}
               [ delete ]
